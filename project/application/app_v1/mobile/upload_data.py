@@ -6,6 +6,10 @@ from textractor import Textractor
 from textractor.data.constants import TextractFeatures
 from textractor.visualizers.entitylist import EntityList
 from textractor.data.constants import TextractFeatures, Direction, DirectionalFinderType
+from fastapi import FastAPI, status
+
+from fastapi import FastAPI, Body, Depends,HTTPException, Security,Form
+
 import re
 import datetime
 from PIL import Image
@@ -290,7 +294,12 @@ def ai(user,image,types):
                 
                 # return  {"message": f"Rep AI Submitted Successfully by {user_data['name']}"}
         except:
-            return {"message": "Uploaded Image is not clear please upload high quality image"}
+              raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Uploaded Image is not clear please upload high quality image"
+        )
+            
+#             return {"message": "Uploaded Image is not clear please upload high quality image"}
        
         
         
