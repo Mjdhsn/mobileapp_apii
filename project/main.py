@@ -232,7 +232,7 @@ async def check_number_message(user:dict= Body(...)):
 
 
 @app.post("/aiprediction",tags=["AI route"])
-async def check_number_message(user:dict= Body(...), image:str=None,types:str=None):
+async def check_number_message(user:dict= Body(...), image:str=Body(...),types:str=None):
     """
 
       input -  user data from login repsonse
