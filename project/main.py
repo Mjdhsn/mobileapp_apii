@@ -240,9 +240,9 @@ async def check_number_message(user:dict= Body(...), image:str=Body(...),types:s
       input2 - image url
 
     """
-    print(user)
-    print('################')
-    print(image)
+    # print(user)
+    # print('################')
+    # print(image)
     return upload_data.ai(user,image,types)
 
 
