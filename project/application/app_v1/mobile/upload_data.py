@@ -17,7 +17,7 @@ from PIL import Image
 import urllib.request
 import difflib
 def ai(user,image,types):
-    user_data =user['user']
+    user_data =user
     
     queries = [
 
