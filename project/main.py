@@ -233,12 +233,16 @@ async def check_number_message(user:dict= Body(...)):
 
 @app.post("/aiprediction",tags=["AI route"])
 async def check_number_message(user:dict= Body(...), image:str=Body(...),types:str=None):
+    
     """
 
       input -  user data from login repsonse
       input2 - image url
 
     """
+    print(user)
+    print('################')
+    print(image)
     return upload_data.ai(user,image,types)
 
 
