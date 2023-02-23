@@ -125,7 +125,7 @@ def ai(user,image,types):
                 # value = int(value)
                 pu_name =  value
 
-                pucode += f"PU_CODE = {state_name/lga_name/ward_name/pu_name}"
+                pucode += f"PU_CODE = {state_name}/{lga_name}/{ward_name}/{pu_name}"
 
             elif query.query ==  'Does Senatorial District word is inside this document ?':
                 if query.result.answer == "yes":
