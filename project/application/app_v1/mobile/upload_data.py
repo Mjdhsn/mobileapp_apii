@@ -53,7 +53,7 @@ def ai(user,image,types):
 )
 
 
-    table = EntityList(document.tables[1])
+    table = EntityList(document.tables[0])
 
     df = table[0].to_pandas()
     party_val = df.iloc[1:][1]
