@@ -7,6 +7,8 @@ from textractor.data.constants import TextractFeatures
 from textractor.visualizers.entitylist import EntityList
 from textractor.data.constants import TextractFeatures, Direction, DirectionalFinderType
 import re
+import os.path
+
 import datetime
 from fastapi import FastAPI, status
 
@@ -39,7 +41,9 @@ def ai(user,image,types):
 
     
 ]
-  
+    # extension = os.path.splitext(image)[1][1:]
+    # if extension == 'pdf' or 'PDF':
+    #     image = pdf2image
     urllib.request.urlretrieve(
                 image,
                 "image.png")
@@ -53,9 +57,19 @@ def ai(user,image,types):
 )
 
 
-    table = EntityList(document.tables[1])
+    table = EntityList(document.tables)
+    if len(table) ==2:
+        df =  table[1].to_pandas()
+    
+    # for tab in table:
+    #     f = tab.to_pandas()
+    #     if 'POLITICAL' in f.iloc[0].values:
+    #         df = f
+    #         print(df)
 
-    df = table[0].to_pandas()
+
+    # df = table[0].to_pandas()
+
     party_val = df.iloc[1:][1]
     party_matching = []
     party_real_values = ['A', 'AA', 'AAC', 'ADC', 'ADP', 'APC', 'APGA', 'APM', 'APP', 'BP', 'LP', 'NNPP', 'NRM', 'PDP', 'PRP', 'SDP','YPP', 'ZLP']
@@ -106,7 +120,7 @@ def ai(user,image,types):
                         value = 0
                 value =  value.strip().replace(" ", "")
                 # value = int(value)
-                lga_name =  value
+                lga_name =  int(value)
 
             elif query.query ==  'What is the Registration area code value ?':
                 value= re.sub("\D","",query.result.answer)
@@ -114,7 +128,7 @@ def ai(user,image,types):
                         value = 0
                 value =  value.strip().replace(" ", "")
                 # value = int(value)
-                ward_name =  value
+                ward_name =  int(value)
             
 
             elif query.query ==  'What is the Polling Unit code value ?':
@@ -123,10 +137,9 @@ def ai(user,image,types):
                         value = 0
                 value =  value.strip().replace(" ", "")
                 # value = int(value)
-                pu_name =  value
+                pu_name =  int(value)
 
                 pucode += f"PU_CODE = {state_name}/{lga_name}/{ward_name}/{pu_name}"
-
             elif query.query ==  'Does Senatorial District word is inside this document ?':
                 if query.result.answer == "yes":
                     table_name = 'SEN_PU_TABLE'
@@ -212,9 +225,8 @@ def ai(user,image,types):
     numberlist = [x for x in numberlist if x != ""]
     numberquery = ", ".join(numberlist)
 
-
     values_matching = []
-    party_values = df.iloc[1:][3]
+    party_values = df.iloc[1:][2]
     for v in party_values:
         n= re.sub("\D","",v)
         if n =="":
@@ -246,11 +258,9 @@ def ai(user,image,types):
         cur = conn.cursor()
 
         try:
-            # if types == "presidential":
-            sql = f"Update {table_name} SET {part},{numberquery},status='collated' where country_id ={country_name} and state_id = {state_name} and lga_id={lga_name} and ward_id={ward_name} and pu_id = {pu_name}"
+            sql = f"Update {table_name} SET {part},{numberquery},status='collated' where lga_id={lga_name} and ward_id={ward_name} and pu_id = {pu_name}"
             cur.execute(sql)
-            sql1 = f"""SELECT * FROM {table_name} where country_id= {country_name} AND state_id = {state_name} and lga_id = {lga_name} and ward_id = {ward_name} and pu_id= {pu_name}"""
-
+            sql1 = f"""SELECT * FROM {table_name} where  lga_id = {lga_name} and ward_id = {ward_name} and pu_id= {pu_name}"""
             final ={}
             try:
                 cur.execute(sql1)
@@ -277,98 +287,19 @@ def ai(user,image,types):
                 final['results'] = parties_results
                 final['total'] = total_results
                 final['other_data'] = other_data_results
-                final['message'] = {f"Successfully collated {election} at PollingUnit:{results[0]['PU_NAME']}"}
+                final['message'] = {f"Successfully collated {election} at PollingUnit: {results[0]['PU_NAME']}"}
 
                 return final
             except Exception as e:
                 print(e)
                 return str(e)
-                
-            #     # return  {"message": f"Presidential Polling unit AI Submitted Successfully by {user_data['name']}"}
-            # elif types == "senate":
-            #     sql = f"Update sen_pu_table SET {part},{numberquery},status='collated' where country_id ={country_name} and state_id = {state_name} AND DISTRICT_ID = {district_name} and lga_id={lga_name} and ward_id={ward_name} and pu_id = {pu_name}"
-            #     cur.execute(sql)
-            #     sql1 = f"""SELECT * FROM sen_pu_table where country_id= {country_name} AND state_id = {state_name} and lga_id = {lga_name} and ward_id = {ward_name} and pu_id= {pu_name}"""
 
-            #     final ={}
-            #     try:
-            #         cur.execute(sql1)
-
-            #         results = cur.fetch_pandas_all()
-            #         results = results.to_json(orient="records")
-            #         results = json.loads(results)
-            #         parties = ["A","AA","AAC","ADC","ADP","APC","APGA","APM","APP","BP","LP","NNPP","NRM","PDP","PRP","SDP","YPP","ZLP"]
-            #         total =["TOTAL_ACCREDITED_VOTERS","TOTAL_REGISTERED_VOTERS","TOTAL_REJECTED_VOTES","BALLOT_ISSUED","UNUSED_BALLOT","SPOILED_BALLOT","VALID_VOTES_C","USED_BALLOT"]
-            
-            #         data = ['DATE_TIME', 'PERSON_COLLATED','FILE']
-            #         parties_results = {}
-            #         total_results={}
-            #         other_data_results={}
-            #         for key in parties:
-            #             parties_results.update( {key:results[0][key]})
-                    
-            #         for key in total:
-            #             total_results.update( {key:results[0][key]})
-
-            #         for key in data:
-            #             other_data_results.update( {key:results[0][key]})
-
-            #         final['results'] = parties_results
-            #         final['total'] = total_results
-            #         final['other_data'] = other_data_results
-
-            #         return final
-            #     except Exception as e:
-            #         print(e)
-            #         return str(e)
-            #     # cur.execute(sql)
-            #     # return  {"message": f"Senate Polling unit AI Submitted Successfully by {user_data['name']}"}
-
-            # elif types == "rep":
-            #     sql = f"Update rep_pu_table SET {part},{numberquery},status='collated' where country_id ={country_name} and state_id = {state_name} AND CONST_ID = {constituency_name} and lga_id={lga_name} and ward_id={ward_name} and pu_id = {pu_name}"
-            #     cur.execute(sql)
-            #     sql1 = f"""SELECT * FROM rep_pu_table where country_id= {country_name} AND state_id = {state_name} and lga_id = {lga_name} and ward_id = {ward_name} and pu_id= {pu_name}"""
-
-            #     final ={}
-            #     try:
-            #         cur.execute(sql1)
-
-            #         results = cur.fetch_pandas_all()
-            #         results = results.to_json(orient="records")
-            #         results = json.loads(results)
-            #         parties = ["A","AA","AAC","ADC","ADP","APC","APGA","APM","APP","BP","LP","NNPP","NRM","PDP","PRP","SDP","YPP","ZLP"]
-            #         total =["TOTAL_ACCREDITED_VOTERS","TOTAL_REGISTERED_VOTERS","TOTAL_REJECTED_VOTES","BALLOT_ISSUED","UNUSED_BALLOT","SPOILED_BALLOT","VALID_VOTES_C","USED_BALLOT"]
-            
-            #         data = ['DATE_TIME', 'PERSON_COLLATED','FILE']
-            #         parties_results = {}
-            #         total_results={}
-            #         other_data_results={}
-            #         for key in parties:
-            #             parties_results.update( {key:results[0][key]})
-                    
-            #         for key in total:
-            #             total_results.update( {key:results[0][key]})
-
-            #         for key in data:
-            #             other_data_results.update( {key:results[0][key]})
-
-            #         final['results'] = parties_results
-            #         final['total'] = total_results
-            #         final['other_data'] = other_data_results
-
-            #         return final
-            #     except Exception as e:
-            #         print(e)
-            #         return str(e)
-                
-                # return  {"message": f"Rep AI Submitted Successfully by {user_data['name']}"}
         except:
             raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Uploaded Image is not clear please upload high quality image"
         )
             
-            # return {"message": "Uploaded Image is not clear please upload high quality image"}
        
         
         
