@@ -42,47 +42,27 @@ def get_db():
 #     warehouse='TEST'
 # )
 
-# def get_db2():
-#     return snowflake.connector.connect(
-
-#     user= 'jameel',
-#     password = 'Jamilu01?',
-#     account = 'pgvbhpz-jq78554',
-#     database='MYDATA',
-#     schema = 'PUBLIC',
-#     warehouse='MYTEST'
-# )
 
 
 # def get_db2():
 #     return snowflake.connector.connect(
 
-#     user= 'lawan',
-#     password = 'Lawan01?',
-#     account = 'lidnpuk-vn41998',
+#     user= 'hafsa',
+#     password = 'Hafsa01?',
+#     account = 'mqnguim-ll14025',
 #     database='MYTRIAL',
 #     schema = 'PUBLIC',
 #     warehouse='TRIAL',
 # )
 
-# def get_db2():
-#     return snowflake.connector.connect(
-
-#     user= 'maryam',
-#     password = 'Maryam01?',
-#     account = 'lwvnpeb-td66940',
-#     database='MYTEST',
-#     schema = 'PUBLIC',
-#     warehouse='TEST',
-# )
 
 def get_db2():
     return snowflake.connector.connect(
 
-    user= 'hafsa',
-    password = 'Hafsa01?',
-    account = 'mqnguim-ll14025',
-    database='MYTRIAL',
+    user= 'maryam',
+    password = 'Maryam01?',
+    account = 'yloufpv-js63877',
+    database='LOGEECAI',
     schema = 'PUBLIC',
-    warehouse='TRIAL',
+    warehouse='LOGEEC',
 )
