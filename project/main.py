@@ -284,12 +284,13 @@ async def check_nr_collate(pucode:str=None,imageurl:str=None):
 # sharpen using unsharp masking
         sharp = filters.unsharp_mask(division, radius=1.5, amount=2.5, multichannel=False, preserve_range=False)
         sharp = (255*sharp).clip(0,255).astype(np.uint8)
-       
+        print(sharp)
         is_success, im_buf_arr = cv2.imencode(".jpg", sharp)
         byte_im = im_buf_arr.tobytes()
-
+        print('ok')
 
         response = textract.analyze_document(Document={'Bytes': byte_im}, FeatureTypes=["FORMS", "TABLES"])
+        print(response)
         raw_text = extract_text(response, extract_by="LINE")
         word_map = map_word_id(response)
         table = extract_table_info(response, word_map)
