@@ -262,7 +262,7 @@ import shutil
 @app.post("/mobile-scanner",  tags=["Mobile app routes"])
 async def check_nr_collate(pucode:str=None,imageurl:str=None):
     try:
-        
+        print(pucode,imageurl)
         textract = boto3.client("textract")
         # encoded_img = user['image'].split(",")[1]
         # binary = base64.b64decode(encoded_img)
@@ -274,7 +274,7 @@ async def check_nr_collate(pucode:str=None,imageurl:str=None):
         pil_image = pil_image_lst[0]
         image = np.array(pil_image) 
         # img_object = cv2.imdecode(img_np_arr, cv2.IMREAD_COLOR)
-       
+        print(image)
         gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
         # blur
         smooth = cv2.GaussianBlur(gray, (33,33), 0)
