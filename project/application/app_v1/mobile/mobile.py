@@ -2469,17 +2469,12 @@ def cancel_data_rep(user,userdata_collate):
 import re
 import difflib
 
-
-
-def scanner(user,rawtext,table,final_map,sharp):
-    now = datetime.now(nigeria)
+import cv2
+def scanner(pucode,rawtext,table,final_map,sharp):
+    now = datetime.now() 
     timer = now.strftime("%m/%d/%Y %H:%M")
     # user_data = user['user']
-    user_data = json.loads(user)
-    name = user_data[0]
-    level= user_data[3]
-
-    user_data =user
+    # user_data =user['userdata']['user']
     total_register = ""
     total_acrredited =""
     total_rejected = ""
@@ -2553,9 +2548,7 @@ def scanner(user,rawtext,table,final_map,sharp):
 
 
     party_real_values = ['A', 'AA', 'AAC', 'ADC', 'ADP', 'APC', 'APGA', 'APM', 'APP', 'BP', 'LP', 'NNPP', 'NRM', 'PDP', 'PRP', 'SDP','YPP', 'ZLP']
-    for i, tab in enumerate(table):
-        if "IN WORDS" in tab:
-            table_values = table[i+1:]
+    table_values = table[2:]
     final_list = []
     party_val = []
     party_values = []
@@ -2566,7 +2559,6 @@ def scanner(user,rawtext,table,final_map,sharp):
         party_values.append(values)
 
     party_val = [x for x in party_val if x != ' ']
-    # print(party_val)
     # valuess = [x for x in valuess if x != ' ']
     party_matching = []
     for p in party_val:
@@ -2593,16 +2585,14 @@ def scanner(user,rawtext,table,final_map,sharp):
         
     party_dictionary =  dict(zip(party_matching,values_matching))
 
-    level_input = level
-
-    
-    country_name = level_input['country']
-    state_name = level_input['state']
-    district_name = level_input['district']
-    constituency_name = level_input['constituency']
-    lga_name = level_input['lga']
-    ward_name = level_input['ward']
-    pu_name = level_input['pollingUnit']
+    # level_input = user_data['level_childs']
+    # country_name = level_input['country']
+    # state_name = level_input['state']
+    # district_name = level_input['district']
+    # constituency_name = level_input['constituency']
+    # lga_name = level_input['lga']
+    # ward_name = level_input['ward']
+    # pu_name = level_input['pollingUnit']
 
     # country_name = 1
     # state_name = 1
@@ -2626,48 +2616,51 @@ def scanner(user,rawtext,table,final_map,sharp):
     for val in rawtext:
         if "HOUSE OF REPRESENTATIVES" in val:
             table_name = "REP_PU_TABLE"
-            final_query = f"Update {table_name} SET {part},{numberquery} where country_id ={country_name} and state_id = {state_name} AND CONST_ID = {constituency_name} and lga_id={lga_name} and ward_id={ward_name} and pu_id = {pu_name}"
+            final_query = f"Update {table_name} SET {part},{numberquery},status='collated' where pu_code={pucode}"
             image_string = cv2.imencode('.png', sharp)[1].tostring()
-            image_name = f"collation/photos/rep/{country_name}_{state_name}_{constituency_name}_{lga_name}_{pu_name}.jpg"
+            image_name = f"collation/photos/{pucode}_rep.jpg"
             s3.Bucket(bucket).put_object(Key=image_name, Body=image_string, 
                                 ContentType="image/png", ACL="public-read")
-            sql = f"""Update rep_pu_table SET file='{image_name}' Where country_id = {country_name} and  state_id= {state_name}  and const_id= {constituency_name} and lga_id= {lga_name} and ward_id= {ward_name} and pu_id= {pu_name}"""
+            sql = f"""Update rep_pu_table SET file='{image_name}' Where pu_code={pucode}"""
             
-            # sql = "Insert"
         elif "SENATE" in val:
             table_name = "SENATE_PU_TABLE"
-            final_query = f"Update {table_name} SET {part},{numberquery} where country_id ={country_name} and state_id = {state_name} and district_id={district_name} and lga_id={lga_name} and ward_id={ward_name} and pu_id = {pu_name}"
+            final_query = f"Update {table_name} SET {part},{numberquery},status='collated' where pu_code={pucode}"
             image_string = cv2.imencode('.png', sharp)[1].tostring()
-            image_name = f"collation/photos/{country_name}_{state_name}_{district_name}_{lga_name}_{pu_name}_senate.jpg"
+            image_name = f"collation/photos/{pucode}_senate.jpg"
             s3.Bucket(bucket).put_object(Key=image_name, Body=image_string, 
                                 ContentType="image/png", ACL="public-read")
-            sql = f"""Update SENATE_PU_TABLE SET file='{image_name}' Where country_id = {country_name} and  state_id= {state_name}  and district_id= {district_name} and lga_id= {lga_name} and ward_id= {ward_name} and pu_id= {pu_name}"""
+            sql = f"""Update SENATE_PU_TABLE SET file='{image_name}' Where pu_code={pucode}"""
 
         elif "PRESIDENT" in val:
             table_name = "PU_RESULT_TABLE"
-            final_query = f"Update {table_name} SET {part},{numberquery} where country_id ={country_name} and state_id = {state_name} and lga_id={lga_name} and ward_id={ward_name} and pu_id = {pu_name}"
+            final_query = f"Update {table_name} SET {part},{numberquery},status='collated' where pu_code={pucode}"
             image_string = cv2.imencode('.png', sharp)[1].tostring()
-            image_name = f"collation/photos/{country_name}_{state_name}_{lga_name}_{pu_name}_presidential.jpg"
+            image_name = f"collation/photos/{pucode}_presidential.jpg"
             s3.Bucket(bucket).put_object(Key=image_name, Body=image_string, 
                                 ContentType="image/png", ACL="public-read")
-            sql = f"""Update PU_RESULT_TABLE SET file='{image_name}' Where country_id = {country_name} and  state_id= {state_name}  and lga_id= {lga_name} and ward_id= {ward_name} and pu_id= {pu_name}"""
+            sql = f"""Update PU_RESULT_TABLE SET file='{image_name}' Where pu_code={pucode}"""
 
     with get_db2() as conn:
         cur = conn.cursor()
         try:
             cur.execute(final_query)
             cur.execute(sql)
+            
             if table_name == 'REP_PU_TABLE':
-                return {"message": f"Rep Submitted Successfully by {user_data['name']}"}
+                return {"message": f"Rep Submitted Successfully by AI"}
             elif table_name == "SENATE_PU_TABLE":
-                return {"message": f"Senate Submitted Successfully by {user_data['name']}"}
+                return {"message": f"Senate Submitted Successfully by AI"}
             elif table_name == "PU_RESULT_TABLE":
-                return  {"message": f"Presidential Submitted Successfully by {user_data['name']}"}
+                return  {"message": f"Presidential Submitted Successfully by AI"}
             else:
                 return {"message": "Please capture again properly"}
 
         except:
             return {"message": "Please capture again properly"}
+
+
+    
 
 
     

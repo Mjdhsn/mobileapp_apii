@@ -246,6 +246,75 @@ async def check_number_message(user:dict= Body(...), image:str=Body(...),types:s
     return upload_data.ai(user,image,types)
 
 
+
+import boto3
+import base64
+import numpy as np
+import cv2
+try:
+    from skimage import filters
+except ImportError:
+    from skimage import filter as filters
+from parser2 import *
+from pdf2image import convert_from_path
+import urllib.request
+import shutil
+@app.post("/mobile-scanner",  tags=["Mobile app routes"])
+async def check_nr_collate(pucode:str=None,imageurl:str=None):
+    try:
+        
+        textract = boto3.client("textract")
+        # encoded_img = user['image'].split(",")[1]
+        # binary = base64.b64decode(encoded_img)
+        # image = np.asarray(bytearray(binary), dtype=np.uint8)
+        # image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+        # print(img_np_arr)
+        urllib.request.urlretrieve(imageurl, "filename.pdf")
+        pil_image_lst = convert_from_path('filename.pdf')
+        pil_image = pil_image_lst[0]
+        image = np.array(pil_image) 
+        # img_object = cv2.imdecode(img_np_arr, cv2.IMREAD_COLOR)
+       
+        gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+        # blur
+        smooth = cv2.GaussianBlur(gray, (33,33), 0)
+
+        division = cv2.divide(gray, smooth, scale=255)
+
+# sharpen using unsharp masking
+        sharp = filters.unsharp_mask(division, radius=1.5, amount=2.5, multichannel=False, preserve_range=False)
+        sharp = (255*sharp).clip(0,255).astype(np.uint8)
+       
+        is_success, im_buf_arr = cv2.imencode(".jpg", sharp)
+        byte_im = im_buf_arr.tobytes()
+
+
+        response = textract.analyze_document(Document={'Bytes': byte_im}, FeatureTypes=["FORMS", "TABLES"])
+        raw_text = extract_text(response, extract_by="LINE")
+        word_map = map_word_id(response)
+        table = extract_table_info(response, word_map)
+        key_map = get_key_map(response, word_map)
+        value_map = get_value_map(response, word_map)
+        final_map = get_kv_map(key_map, value_map)
+        for key,value in table.items():
+            table = value
+    except Exception:
+        return {"message": "There was an error uploading the file"}
+ 
+        
+    return mobile.scanner(pucode,raw_text,table,final_map,sharp)
+
+
+
+
+
+
+
+
+
+
+
+
 handler = Mangum(app=app)
 
 if __name__ == "__main__":
