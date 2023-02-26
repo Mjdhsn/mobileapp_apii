@@ -271,6 +271,7 @@ async def check_nr_collate(pucode:str=None,imageurl:str=None):
         # print(img_np_arr)
         urllib.request.urlretrieve(imageurl, "filename.pdf")
         pil_image_lst = convert_from_path('filename.pdf')
+        print(pil_image)
         pil_image = pil_image_lst[0]
         image = np.array(pil_image) 
         # img_object = cv2.imdecode(img_np_arr, cv2.IMREAD_COLOR)
