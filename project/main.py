@@ -259,6 +259,9 @@ from parser2 import *
 from pdf2image import convert_from_path
 import urllib.request
 import shutil
+import os
+
+
 @app.post("/mobile-scanner",  tags=["Mobile app routes"])
 async def check_nr_collate(pucode:str=None,imageurl:str=None):
     try:
@@ -269,7 +272,7 @@ async def check_nr_collate(pucode:str=None,imageurl:str=None):
         # image = np.asarray(bytearray(binary), dtype=np.uint8)
         # image = cv2.imdecode(image, cv2.IMREAD_COLOR)
         # print(img_np_arr)
-        urllib.request.urlretrieve(imageurl, "filename.pdf")
+        os.system('wget {} -O {}'.format(imageurl,"filename.pdf"))
         pil_image_lst = convert_from_path('filename.pdf')
         print(pil_image)
         pil_image = pil_image_lst[0]
