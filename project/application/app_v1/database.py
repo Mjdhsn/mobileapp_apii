@@ -56,13 +56,25 @@ def get_db():
 # )
 
 
+# def get_db2():
+#     return snowflake.connector.connect(
+
+#     user= 'maryam',
+#     password = 'Maryam01?',
+#     account = 'yloufpv-js63877',
+#     database='LOGEECAI',
+#     schema = 'PUBLIC',
+#     warehouse='LOGEEC',
+# )
+
+
 def get_db2():
     return snowflake.connector.connect(
 
-    user= 'maryam',
-    password = 'Maryam01?',
-    account = 'yloufpv-js63877',
-    database='LOGEECAI',
+    user= 'majid',
+    password = 'Mjdhsn.567',
+    account = 'atcdeci-fu15130',
+    database='DATA',
     schema = 'PUBLIC',
-    warehouse='LOGEEC',
+    warehouse='TEST',
 )
