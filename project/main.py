@@ -50,7 +50,8 @@ async def check_number_collate(user:dict= Body(...),userdata_collate:dict= Body(
       This route is for collation submit
     """
 
-
+    print("user",user)
+    print("userdata",userdata_collate)
     return mobile.submit_data(user,userdata_collate)
 
 #  routes for mobile application
@@ -64,16 +65,16 @@ async def check_number_collate(user:dict= Body(...),userdata_collate:dict= Body(
 
     return mobile.submit_data_senate(user,userdata_collate)
 
-#  routes for mobile application
-@app.post("/mobile_submit-rep",  tags=["Mobile app routes"])
-async def check_number_collate(user:dict= Body(...),userdata_collate:dict= Body(...)):
+# #  routes for mobile application
+# @app.post("/mobile_submit-rep",  tags=["Mobile app routes"])
+# async def check_number_collate(user:dict= Body(...),userdata_collate:dict= Body(...)):
     
-    """
-      This route is for collation submit
-    """
+#     """
+#       This route is for collation submit
+#     """
 
 
-    return mobile.submit_data_rep(user,userdata_collate)
+#     return mobile.submit_data_rep(user,userdata_collate)
 
 
 
@@ -96,13 +97,13 @@ async def check_number_cancel(user:dict= Body(...),userdata_collate:dict= Body(.
     
     return mobile.cancel_data_senate(user,userdata_collate)
 
-@app.post("/mobile-cancel-rep",tags=["Mobile app routes"])
-async def check_number_cancel(user:dict= Body(...),userdata_collate:dict= Body(...)):
-    """
-      This route is for collation cancel
-"""
+# @app.post("/mobile-cancel-rep",tags=["Mobile app routes"])
+# async def check_number_cancel(user:dict= Body(...),userdata_collate:dict= Body(...)):
+#     """
+#       This route is for collation cancel
+# """
     
-    return mobile.cancel_data_rep(user,userdata_collate)
+#     return mobile.cancel_data_rep(user,userdata_collate)
 
 @app.post("/mobile-postmedia",tags=["Mobile app routes"])
 async def check_number_postmedia(user:dict= Body(...),userdata_collate:dict= Body(...)):
@@ -157,15 +158,15 @@ async def check_number_message(user:dict= Body(...)):
     """
     return mobile.get_data_senate(user)
 
-@app.post("/mobile-getdata-rep",tags=["Mobile app routes"])
-async def check_number_message(user:dict= Body(...)):
-    """
-      This route to get current data of collation form
+# @app.post("/mobile-getdata-rep",tags=["Mobile app routes"])
+# async def check_number_message(user:dict= Body(...)):
+#     """
+#       This route to get current data of collation form
 
-      input -  user data from login repsonse
+#       input -  user data from login repsonse
 
-    """
-    return mobile.get_data_rep(user)
+#     """
+#     return mobile.get_data_rep(user)
 
 
 
@@ -247,67 +248,67 @@ async def check_number_message(user:dict= Body(...), image:str=Body(...),types:s
 
 
 
-import boto3
-import base64
-import numpy as np
-import cv2
-try:
-    from skimage import filters
-except ImportError:
-    from skimage import filter as filters
-from parser2 import *
-from pdf2image import convert_from_path
-import urllib.request
-import shutil
-import os
+# import boto3
+# import base64
+# import numpy as np
+# import cv2
+# try:
+#     from skimage import filters
+# except ImportError:
+#     from skimage import filter as filters
+# from parser2 import *
+# from pdf2image import convert_from_path
+# import urllib.request
+# import shutil
+# import os
 
 
-@app.post("/mobile-scanner",  tags=["Mobile app routes"])
-async def check_nr_collate(pucode:str=None,imageurl:str=None):
-    try:
-        print(pucode,imageurl)
-        textract = boto3.client("textract")
-        # encoded_img = user['image'].split(",")[1]
-        # binary = base64.b64decode(encoded_img)
-        # image = np.asarray(bytearray(binary), dtype=np.uint8)
-        # image = cv2.imdecode(image, cv2.IMREAD_COLOR)
-        # print(img_np_arr)
-        os.system('wget {} -O {}'.format(imageurl,"filename.pdf"))
-        pil_image_lst = convert_from_path('filename.pdf')
-        print(pil_image)
-        pil_image = pil_image_lst[0]
-        image = np.array(pil_image) 
-        # img_object = cv2.imdecode(img_np_arr, cv2.IMREAD_COLOR)
-        print(image)
-        gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
-        # blur
-        smooth = cv2.GaussianBlur(gray, (33,33), 0)
+# @app.post("/mobile-scanner",  tags=["Mobile app routes"])
+# async def check_nr_collate(pucode:str=None,imageurl:str=None):
+#     try:
+#         print(pucode,imageurl)
+#         textract = boto3.client("textract")
+#         # encoded_img = user['image'].split(",")[1]
+#         # binary = base64.b64decode(encoded_img)
+#         # image = np.asarray(bytearray(binary), dtype=np.uint8)
+#         # image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+#         # print(img_np_arr)
+#         os.system('wget {} -O {}'.format(imageurl,"filename.pdf"))
+#         pil_image_lst = convert_from_path('filename.pdf')
+#         print(pil_image)
+#         pil_image = pil_image_lst[0]
+#         image = np.array(pil_image) 
+#         # img_object = cv2.imdecode(img_np_arr, cv2.IMREAD_COLOR)
+#         print(image)
+#         gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+#         # blur
+#         smooth = cv2.GaussianBlur(gray, (33,33), 0)
 
-        division = cv2.divide(gray, smooth, scale=255)
+#         division = cv2.divide(gray, smooth, scale=255)
 
-# sharpen using unsharp masking
-        sharp = filters.unsharp_mask(division, radius=1.5, amount=2.5, multichannel=False, preserve_range=False)
-        sharp = (255*sharp).clip(0,255).astype(np.uint8)
-        print(sharp)
-        is_success, im_buf_arr = cv2.imencode(".jpg", sharp)
-        byte_im = im_buf_arr.tobytes()
-        print('ok')
+# # sharpen using unsharp masking
+#         sharp = filters.unsharp_mask(division, radius=1.5, amount=2.5, multichannel=False, preserve_range=False)
+#         sharp = (255*sharp).clip(0,255).astype(np.uint8)
+#         print(sharp)
+#         is_success, im_buf_arr = cv2.imencode(".jpg", sharp)
+#         byte_im = im_buf_arr.tobytes()
+#         print('ok')
 
-        response = textract.analyze_document(Document={'Bytes': byte_im}, FeatureTypes=["FORMS", "TABLES"])
-        print(response)
-        raw_text = extract_text(response, extract_by="LINE")
-        word_map = map_word_id(response)
-        table = extract_table_info(response, word_map)
-        key_map = get_key_map(response, word_map)
-        value_map = get_value_map(response, word_map)
-        final_map = get_kv_map(key_map, value_map)
-        for key,value in table.items():
-            table = value
-    except Exception:
-        return {"message": "There was an error uploading the file"}
+#         response = textract.analyze_document(Document={'Bytes': byte_im}, FeatureTypes=["FORMS", "TABLES"])
+#         print(response)
+#         raw_text = extract_text(response, extract_by="LINE")
+#         word_map = map_word_id(response)
+#         table = extract_table_info(response, word_map)
+#         key_map = get_key_map(response, word_map)
+#         value_map = get_value_map(response, word_map)
+#         final_map = get_kv_map(key_map, value_map)
+#         for key,value in table.items():
+#             table = value
+#     except Exception:
+#         return {"message": "There was an error uploading the file"}
  
         
-    return mobile.scanner(pucode,raw_text,table,final_map,sharp)
+#     return mobile.scanner(pucode,raw_text,table,final_map,sharp)
 
 
 

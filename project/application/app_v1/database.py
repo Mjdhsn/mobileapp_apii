@@ -6,7 +6,7 @@ HOST = 'electionkanoml.cypjjjls3xgo.eu-west-1.rds.amazonaws.com'
 # HOST ='election.cypjjjls3xgo.eu-west-1.rds.amazonaws.com'
 USER = 'admin'
 PASS = 'election1234'
-db='test'
+db='KANO'
 
 
 
