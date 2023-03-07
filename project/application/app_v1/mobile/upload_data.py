@@ -1,5 +1,5 @@
 
-from application.app_v1.database import get_db,get_db2
+from application.app_v1.database import get_db
 import json
 import os
 
@@ -259,7 +259,7 @@ from PIL import Image
 #         election = "Senate elections"
 #     elif table_name == "REP_PU_TABLE":
 #         election = "House of representatives elections"
-#     with get_db2() as conn:
+#     with get_db() as conn:
 #         cur = conn.cursor()
 
 #         try:
@@ -312,7 +312,7 @@ from PIL import Image
     
 
 def addData_pu(state, lga, ward, pu, file, remark, type, lat, long, phone, email ):
-    with get_db2() as conn:
+    with get_db() as conn:
         cur = conn.cursor()
         try:
             sql = '''INSERT INTO userdata_pu
@@ -343,7 +343,7 @@ def addData_pu(state, lga, ward, pu, file, remark, type, lat, long, phone, email
 
 def getData_pu(country,state, lga, ward, pu):
 
-    with get_db2() as conn:
+    with get_db() as conn:
         cur = conn.cursor()
 
         sql = f"SELECT * FROM userdata_pu WHERE  state_id = {state} AND lga_id= {lga} AND ward_id = {ward} AND pu_id = {pu}"
@@ -363,7 +363,7 @@ def getData_pu(country,state, lga, ward, pu):
 
 
 def addData_ward(state, lga, ward,file, remark, type, lat, long, phone, email ):
-    with get_db2() as conn:
+    with get_db() as conn:
         cur = conn.cursor()
         try:
             sql = '''INSERT INTO userdata_ward
@@ -393,7 +393,7 @@ def addData_ward(state, lga, ward,file, remark, type, lat, long, phone, email ):
 
 def getData_ward(country,state, lga, ward):
 
-    with get_db2() as conn:
+    with get_db() as conn:
         cur = conn.cursor()
 
         sql = f"SELECT * FROM userdata_ward WHERE  state_id = {state} AND lga_id= {lga} AND ward_id = {ward}"
@@ -412,7 +412,7 @@ def getData_ward(country,state, lga, ward):
 
 
 def addData_lga(state, lga,file, remark, type, lat, long, phone, email ):
-    with get_db2() as conn:
+    with get_db() as conn:
         cur = conn.cursor()
         try:
             sql = '''INSERT INTO userdata_lga
@@ -442,7 +442,7 @@ def addData_lga(state, lga,file, remark, type, lat, long, phone, email ):
 
 def getData_lga(country,state, lga):
 
-    with get_db2() as conn:
+    with get_db() as conn:
         cur = conn.cursor()
 
         sql = f"SELECT * FROM userdata_lga WHERE  state_id = {state} AND lga_id= {lga}"
@@ -460,7 +460,7 @@ def getData_lga(country,state, lga):
             return str(e)
 
 def addData_district(state, district, file, remark, type, lat, long, phone, email ):
-    with get_db2() as conn:
+    with get_db() as conn:
         cur = conn.cursor()
         try:
             sql = '''INSERT INTO userdata_district
@@ -490,7 +490,7 @@ def addData_district(state, district, file, remark, type, lat, long, phone, emai
 
 def getData_district(country,state, constituency):
 
-    with get_db2() as conn:
+    with get_db() as conn:
         cur = conn.cursor()
 
         sql = f"SELECT * FROM userdata_district WHERE  state_id = {state} AND district_id= {constituency}"
@@ -508,7 +508,7 @@ def getData_district(country,state, constituency):
             return str(e)
 
 def addData_constituency(state, constituency, file, remark, type, lat, long, phone, email ):
-    with get_db2() as conn:
+    with get_db() as conn:
         cur = conn.cursor()
         try:
             sql = '''INSERT INTO userdata_constituency
@@ -537,7 +537,7 @@ def addData_constituency(state, constituency, file, remark, type, lat, long, pho
 
 def getData_constituency(country,state, constituency):
 
-    with get_db2() as conn:
+    with get_db() as conn:
         cur = conn.cursor()
 
         sql = f"SELECT * FROM userdata_constituency WHERE  state_id = {state} AND const_id = {constituency}"
@@ -556,7 +556,7 @@ def getData_constituency(country,state, constituency):
 
 
 def addData_state(state,file, remark, type, lat, long, phone, email ):
-    with get_db2() as conn:
+    with get_db() as conn:
         cur = conn.cursor()
         try:
             sql = '''INSERT INTO userdata_state
@@ -585,7 +585,7 @@ def addData_state(state,file, remark, type, lat, long, phone, email ):
 
 def getData_state(country,state):
 
-    with get_db2() as conn:
+    with get_db() as conn:
         cur = conn.cursor()
 
         sql = f"SELECT * FROM userdata_state WHERE  state_id ={state}"
@@ -604,7 +604,7 @@ def getData_state(country,state):
 
 
 def addData_country(country,file, remark,type, lat, long, phone, email ):
-    with get_db2() as conn:
+    with get_db() as conn:
         cur = conn.cursor()
         try:
             sql = '''INSERT INTO userdata_country
@@ -634,7 +634,7 @@ def addData_country(country,file, remark,type, lat, long, phone, email ):
 
 def getData_country(country):
 
-    with get_db2() as conn:
+    with get_db() as conn:
         cur = conn.cursor()
 
         sql = f"SELECT * FROM userdata_country"
