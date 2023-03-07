@@ -282,7 +282,7 @@ def cancel_data(user,userdata_collate):
             timer = now.strftime("%m/%d/%Y %H:%M")
   
             sql = f"""Update pu_result_table  SET status='canceled', A=0, AA=0, AAC=0, ADC=0, ADP=0, APC=0, APGA=0, APM=0, APP=0, BP=0, LP=0, NNPP=0, NRM=0, PDP=0, PRP=0, SDP=0, YPP=0, ZLP=0 ,total_valid_votes_c=0, Total_Rejected_votes=0,Total_Accredited_voters=0,Total_Registered_voters=0, date_time ='{timer}'
- Where country_id = {country_name} and state_id= {state_name} and lga_id= {lga_name} and ward_id= {ward_name} and pu_id= {pu_name}"""
+ Where  state_id= {state_name} and lga_id= {lga_name} and ward_id= {ward_name} and pu_id= {pu_name}"""
             
             try:
                 cur.execute(sql)
@@ -805,7 +805,7 @@ def message(user):
                 message1 = ["Welcome"]
                 message2 = [name]
                 message3 = [typo + " " + "elections as Supervisor" ]
-                message4 = ["at " +f"{result[0]}"]
+                message4 = ["at " +f"{result['state_name']}"]
                 out = {"message":message1+message2+message3+message4,"aspirant_avatar":aspirant_photo}
                 return out
             # app.conn.close()
@@ -826,7 +826,7 @@ def message(user):
                 message1 = ["Welcome"]
                 message2 = [name]
                 message3 = [typo + " " + "elections as Supervisor" ]
-                message4 = ["at " +f"{result[0]}/{result[1]}"]
+                message4 = ["at " +f"{result['state_name']}/{result['lga_name']}"]
                 out = {"message":message1+message2+message3+message4,"aspirant_avatar":aspirant_photo}
                 return out
             # app.conn.close()
@@ -844,10 +844,11 @@ def message(user):
                 sql = f"""select distinct state_name,lga_name,ward_name from pu_result_table where state_id={state_name} and lga_id={lga_name} and ward_id={ward_name}"""
                 cur.execute(sql)
                 result = cur.fetchone()
+
                 message1 = ["Welcome"]
                 message2 = [name]
                 message3 = [typo + " " + "elections as Supervisor" ]
-                message4 = ["at " +f"{result[0]}/{result[1]}/{result[2]}"]
+                message4 = ["at " +f"{result['state_name']}/{result['lga_name']}/{result['ward_name']}"]
                 out = {"message":message1+message2+message3+message4,"aspirant_avatar":aspirant_photo}
                 return out
             # app.conn.close()
@@ -867,10 +868,11 @@ def message(user):
                 sql = f"""select distinct state_name,lga_name,ward_name,pu_name from pu_result_table where state_id={state_name} and lga_id={lga_name} and ward_id={ward_name} and pu_id={pu_name}"""
                 cur.execute(sql)
                 result = cur.fetchone()
+            
                 message1 = ["Welcome"]
                 message2 = [name]
                 message3 = [typo + " " + "elections as Agent" ]
-                message4 = ["at " +f"{result[0]}/{result[1]}/{result[2]}/{result[3]}"]
+                message4 = ["at " +f"{result['state_name']}/{result['lga_name']}/{result['ward_name']}/{result['pu_name']}"]
                 
                 out = {"message":message1+message2+message3+message4,"aspirant_avatar":aspirant_photo}
                 return out
@@ -892,7 +894,7 @@ def message(user):
                 message1 = ["Welcome"]
                 message2 = [name]
                 message3 = [typo + " " + "elections as Supervisor" ]
-                message4 = ["at " +f"{result[0]}/{result[1]}"]
+                message4 = ["at " +f"{result['state_name']}/{result['constituency_name']}"]
                 
                 out = {"message":message1+message2+message3+message4,"aspirant_avatar":aspirant_photo}
                 return out
@@ -1080,7 +1082,7 @@ def get_data(user):
                 # results = results.to_json(orient="records")
                 # results = json.loads(results[0])
                 parties = ["A","AA","AAC","ADC","ADP","APC","APGA","APM","APP","BP","LP","NNPP","NRM","PDP","PRP","SDP","YPP","ZLP"]
-                total =["Total_Accredited_voters","Total_Registered_voters","Total_Rejected_votes","total_valid_votes_c"]
+                total =["Total_Accredited_voters","Total_Registered_voters","Total_Rejected_votes","total_valid_votes_c",]
     
                 data = ['DATE_TIME', 'PERSON_COLLATED']
                 parties_results = {}
