@@ -327,7 +327,7 @@ def upload_data(user,userdata_postmedia):
     file = userdata_postmedia['file']
     type = userdata_postmedia['type']
     lat = userdata_postmedia['lat']
-    long = userdata_postmedia['long']
+    lon = userdata_postmedia['long']
     
     with get_db() as conn:
         cur = conn.cursor()
@@ -343,7 +343,7 @@ def upload_data(user,userdata_postmedia):
                             file,
                             file_type,
                             lat,
-                            long,
+                            lon,
                             phone,
                             date
 
@@ -351,7 +351,7 @@ def upload_data(user,userdata_postmedia):
                             VALUES( % s, % s, % s, %s,%s, %s,%s)'''
                             
                 cur.execute(
-                        sql, (remark, file, type, lat, long, phone,timer))
+                        sql, (remark, file, type, lat, lon, phone,timer))
                 conn.commit()
                 return '1'
             except:
@@ -371,7 +371,7 @@ def upload_data(user,userdata_postmedia):
                         file,
                         file_type,
                         lat,
-                        long,
+                        lon,
                         phone,
                         date
 
@@ -379,7 +379,7 @@ def upload_data(user,userdata_postmedia):
                         VALUES(% s, % s, % s, % s, % s, %s, %s,%s)'''
                         
                 cur.execute(
-                    sql, (state_name, remark,file, type, lat, long, phone,timer))
+                    sql, (state_name, remark,file, type, lat, lon, phone,timer))
                 conn.commit()
             # app.conn.close()
                 return '1'
@@ -401,14 +401,14 @@ def upload_data(user,userdata_postmedia):
                         file,
                         file_type,
                         lat,
-                        long,
+                        lon,
                         phone,
                         date
 
                         )
                         VALUES(% s,% s, % s, % s, % s, %s,%s,%s,%s)'''
                 cur.execute(
-                    sql, (state_name, lga_name, remark, file, type, lat, long, phone,timer))
+                    sql, (state_name, lga_name, remark, file, type, lat, lon, phone,timer))
                 
                 conn.commit()
             # app.conn.close()
@@ -433,7 +433,7 @@ def upload_data(user,userdata_postmedia):
                         file,
                         file_type,
                         lat,
-                        long,
+                        lon,
                         phone,
                         date
 
@@ -441,7 +441,7 @@ def upload_data(user,userdata_postmedia):
                         VALUES(% s, % s, % s, % s, % s, % s, %s,%s,%s,%s)'''
                         
                 cur.execute(
-                    sql, (state_name, lga_name, ward_name,  remark, file, type, lat, long, phone,timer))
+                    sql, (state_name, lga_name, ward_name,  remark, file, type, lat, lon, phone,timer))
                 
                 conn.commit()
             # app.conn.close()
@@ -467,7 +467,7 @@ def upload_data(user,userdata_postmedia):
                         file,
                         file_type,
                         lat,
-                        long,
+                        lon,
                         phone,
                         date
 
@@ -475,7 +475,7 @@ def upload_data(user,userdata_postmedia):
                         VALUES( % s,% s, % s, % s, % s, % s, % s, %s,%s, %s,%s)'''
                         
                 cur.execute(
-                    sql, (state_name, lga_name, ward_name, pu_name,  remark, file, type, lat, long, phone,timer))
+                    sql, (state_name, lga_name, ward_name, pu_name,  remark, file, type, lat, lon, phone,timer))
                 conn.commit()
             # app.conn.close()
                 return '1'
