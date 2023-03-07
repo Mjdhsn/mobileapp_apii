@@ -62,7 +62,8 @@ async def check_number_collate(user:dict= Body(...),userdata_collate:dict= Body(
       This route is for collation submit
     """
 
-
+    print("user",user)
+    print("userdata",userdata_collate)
     return mobile.submit_data_senate(user,userdata_collate)
 
 # #  routes for mobile application

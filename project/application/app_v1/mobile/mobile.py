@@ -951,6 +951,7 @@ def get_data(user):
             timer = now.strftime("%m/%d/%Y %H:%M")
            
             sql = f"""select * from state_result_table  Where state_id= {state_name} """
+            print(sql)
             final={}
             try:
                 cur.execute(sql)
@@ -990,7 +991,7 @@ def get_data(user):
             timer = now.strftime("%m/%d/%Y %H:%M")
 
             sql = f"""select * from lga_result_table  Where state_id= {state_name} and lga_id= {lga_name}"""
-            
+            print(sql)
             final={}
             try:
                 cur.execute(sql)
@@ -1030,7 +1031,7 @@ def get_data(user):
             timer = now.strftime("%m/%d/%Y %H:%M")
             
             sql = f"""select * from ward_result_table  Where state_id= {state_name} and lga_id= {lga_name} and ward_id= {ward_name}"""
-            
+            print(sql)
             final={}
             try:
                 cur.execute(sql)
@@ -1071,7 +1072,7 @@ def get_data(user):
             timer = now.strftime("%m/%d/%Y %H:%M")
             
             sql = f"""select * from pu_result_table  Where state_id= {state_name} and lga_id= {lga_name} and ward_id= {ward_name} and pu_id= {pu_name}"""
-            
+            print(sql)
             final={}
             try:
                 cur.execute(sql)
@@ -1160,7 +1161,6 @@ def get_data_senate(user):
             timer = now.strftime("%m/%d/%Y %H:%M")
 
             sql = f"""select * from  house_lga_table  Where  state_id= {state_name} and lga_id= {lga_name}"""
-            
             final={}
             try:
                 cur.execute(sql)
@@ -1609,7 +1609,7 @@ def submit_data_senate(user,userdata_collate):
             # del userdata_collate['Total_Accredited_voters']
             userdata_collate['total_valid_votes_c'] = userdata_collate['VALID_VOTES_C']
             del userdata_collate['VALID_VOTES_C']
-            sql = f"""SELECT DISTINCT state_id,state_name, house_id,district_name FROM house_pu_table WHERE 
+            sql = f"""SELECT DISTINCT state_id,state_name, house_id,house_name FROM house_pu_table WHERE 
             state_id = {state_name} AND 
             lga_id = {lga_name}"""
         # else:
