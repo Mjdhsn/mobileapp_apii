@@ -1,5 +1,4 @@
 import pymysql
-import snowflake.connector
 
 
 HOST = 'electionkanoml.cypjjjls3xgo.eu-west-1.rds.amazonaws.com'
@@ -68,13 +67,13 @@ def get_db():
 # )
 
 
-def get_db2():
-    return snowflake.connector.connect(
+# def get_db2():
+#     return snowflake.connector.connect(
 
-    user= 'majid',
-    password = 'Mjdhsn.567',
-    account = 'atcdeci-fu15130',
-    database='DATA',
-    schema = 'PUBLIC',
-    warehouse='TEST',
-)
+#     user= 'majid',
+#     password = 'Mjdhsn.567',
+#     account = 'atcdeci-fu15130',
+#     database='DATA',
+#     schema = 'PUBLIC',
+#     warehouse='TEST',
+# )

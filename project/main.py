@@ -9,17 +9,16 @@ from fastapi.middleware.cors import CORSMiddleware
 import json, requests
 from fastapi import FastAPI, Request
 import uvicorn
-from pydantic import BaseModel
 from application.app_v1.mobile import mobile,upload_data
 from mangum import Mangum
 
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
-from fastapi_jwt import (
-    JwtAccessBearerCookie,
-    JwtAuthorizationCredentials,
-    JwtRefreshBearer,
-)
+# from fastapi_jwt import (
+#     JwtAccessBearerCookie,
+#     JwtAuthorizationCredentials,
+#     JwtRefreshBearer,
+# )
 
 app = FastAPI()
 
