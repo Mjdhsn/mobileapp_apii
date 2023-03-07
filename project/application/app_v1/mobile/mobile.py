@@ -1641,6 +1641,8 @@ def get_data_time(user):
             sql = f"""Update country_result_table  set time_start='{timer}'"""
             try:
                 cur.execute(sql)
+                conn.commit()
+
                 return {f"Started at {timer}"}
             except Exception as e:
                 print(e)
@@ -1656,6 +1658,8 @@ def get_data_time(user):
             sql = f"""Update state_result_table  set time_start='{timer}' where state_id={state_name}"""
             try:
                 cur.execute(sql)
+                conn.commit()
+
                 return {f"Started at {timer}"}
             except Exception as e:
                 print(e)
@@ -1670,8 +1674,10 @@ def get_data_time(user):
             state_name = level_input['state']
             lga_name = level_input['lga']
             sql = f"""Update lga_result_table  set time_start='{timer}' where state_id={state_name}  and lga_id={lga_name} """
+            print(sql)
             try:
                 cur.execute(sql)
+                conn.commit()
                 return {f"Started at {timer}"}
             except Exception as e:
                 print(e)
@@ -1690,6 +1696,8 @@ def get_data_time(user):
             sql = f"""Update ward_result_table  set time_start='{timer}' where  state_id={state_name} and lga_id={lga_name} and ward_id={ward_name}"""
             try:
                 cur.execute(sql)
+                conn.commit()
+
                 return {f"Started at {timer}"}
             except Exception as e:
                 print(e)
@@ -1709,6 +1717,7 @@ def get_data_time(user):
             sql = f"""Update pu_result_table  set time_start='{timer}' where state_id={state_name} and lga_id={lga_name} and ward_id={ward_name} and pu_id={pu_name}"""
             try:
                 cur.execute(sql)
+                conn.commit()
                 return {f"Started at {timer}"}
             except Exception as e:
                 print(e)
@@ -1727,6 +1736,7 @@ def get_data_time(user):
             sql = f"""Update sen_district_table  set time_start='{timer}' where state_id={state_name} and district_id={district_name} """
             try:
                 cur.execute(sql)
+                conn.commit()
                 return {f"Started at {timer}"}
             except Exception as e:
                 print(e)
@@ -1741,6 +1751,7 @@ def get_data_time(user):
             sql = f"""Update rep_constituency_table  set time_start='{timer}' where state_id={state_name} and const_id={constituency_name}"""
             try:
                 cur.execute(sql)
+                conn.commit()
                 return {f"Started at {timer}"}
             except Exception as e:
                 print(e)
